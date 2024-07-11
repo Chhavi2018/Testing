@@ -1,0 +1,103 @@
+================Driver.cs Code===============
+  using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Edge;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Testing_Framework_Demo.Common
+{
+    public class Driver
+    {
+        public IWebDriver driver=null;
+
+        public void launchBrowser(string browser)
+        {
+            switch (browser)
+            {
+                case "Chrome":
+                    driver = new ChromeDriver();
+                    break;
+                case "Edge":
+                    driver = new EdgeDriver();
+                    break;
+                default:
+                    driver = new ChromeDriver();
+                    break;
+            }
+            driver.Manage().Window.Maximize();
+            driver.Navigate().GoToUrl("https://demoqa.com");
+        }
+
+        public IWebDriver getDriver()
+        {
+            return driver;
+        }
+
+        public void Close()
+        {
+            driver.Quit();
+        }
+
+    }
+}
+
+=============TestBase.cs Code==================
+  using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Testing_Framework_Demo.Common
+{
+    [TestClass]
+    public class TestBase
+    {
+        public IWebDriver webDriver;
+        public Driver driver;
+
+        [TestInitialize]
+
+        public void startUpTest()
+        {
+            driver = new Driver();
+            driver.launchBrowser("chrome");
+            webDriver=driver.getDriver();
+        }
+
+        [TestCleanup]
+        public void endTest()
+        {
+        driver.Close();
+        }
+
+    }
+}
+
+================Wait.cs Code===============
+  using OpenQA.Selenium;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SeleniumExtras.WaitHelpers;
+using OpenQA.Selenium.Support.UI;
+
+namespace Testing_Framework_Demo.Common
+{
+    public class Wait
+    {
+        public static void waitForElement(WebDriverWait wait,IWebElement element)
+        {
+            wait.Until(ExpectedConditions.ElementToBeClickable(element));
+        }
+    }
+}
+
