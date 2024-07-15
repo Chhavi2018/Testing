@@ -6,3 +6,60 @@ public class Student
     public string Department { get; set; }
     public string Address { get; set; }
 }
+
+public class StudentController : Controller
+{
+    private static List<Student> students = new List<Student>();
+
+    // GET: Student
+    public ActionResult Index()
+    {
+        return View(students);
+    }
+
+    // GET: Student/Create
+    public ActionResult Create()
+    {
+        return View();
+    }
+
+    // POST: Student/Create
+    [HttpPost]
+    public ActionResult Create(Student student)
+    {
+        try
+        {
+            student.Id = students.Count > 0 ? students.Max(s => s.Id) + 1 : 1;
+            students.Add(student);
+            return RedirectToAction("Index");
+        }
+        catch
+        {
+            return View();
+        }
+    }
+
+    // GET: Student/Delete/5
+    public ActionResult Delete(int id)
+    {
+        var student = students.FirstOrDefault(s => s.Id == id);
+        return View(student);
+    }
+
+    // POST: Student/Delete/5
+    [HttpPost]
+    public ActionResult Delete(int id, FormCollection collection)
+    {
+        try
+        {
+            var student = students.FirstOrDefault(s => s.Id == id);
+            students.Remove(student);
+            return RedirectToAction("Index");
+        }
+        catch
+        {
+            return View();
+        }
+    }
+}
+
