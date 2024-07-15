@@ -63,3 +63,42 @@ public class StudentController : Controller
     }
 }
 
+
+
+@model List<Student>
+
+@{
+    ViewBag.Title = "Students List";
+}
+
+<h2>Students List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Role Number</th>
+            <th>Department</th>
+            <th>Address</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var student in Model)
+    {
+        <tr>
+            <td>@student.Id</td>
+            <td>@student.Name</td>
+            <td>@student.RoleNumber</td>
+            <td>@student.Department</td>
+            <td>@student.Address</td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { id = student.Id })
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@Html.ActionLink("Create New", "Create")
