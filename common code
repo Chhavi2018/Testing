@@ -1,12 +1,82 @@
-public class Student
+-------------This is BundleConfig.cs-----------------
+using System.Web;
+using System.Web.Optimization;
+
+namespace Basic_CRUD
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string RoleNumber { get; set; }
-    public string Department { get; set; }
-    public string Address { get; set; }
+    public class BundleConfig
+    {
+        // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
+        public static void RegisterBundles(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+                        "~/Scripts/jquery-{version}.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+                        "~/Scripts/jquery.validate*"));
+
+            // Use the development version of Modernizr to develop with and learn from. Then, when you're
+            // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
+            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
+                        "~/Scripts/modernizr-*"));
+
+            bundles.Add(new Bundle("~/bundles/bootstrap").Include(
+                      "~/Scripts/bootstrap.js"));
+
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/Content/bootstrap.css",
+                      "~/Content/site.css"));
+        }
+    }
 }
----------This is controller--------------------
+---------------This is FilterConfig.cs---------
+
+using System.Web;
+using System.Web.Mvc;
+
+namespace Basic_CRUD
+{
+    public class FilterConfig
+    {
+        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        {
+            filters.Add(new HandleErrorAttribute());
+        }
+    }
+}
+
+
+---------------This is routeconfig.cs----------------
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+
+namespace Basic_CRUD
+{
+    public class RouteConfig
+    {
+        public static void RegisterRoutes(RouteCollection routes)
+        {
+            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            routes.MapRoute(
+                name: "Default",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Student", action = "Index", id = UrlParameter.Optional }
+            );
+        }
+    }
+}
+
+
+
+
+
+---------This is Student controller--------------------
 public class StudentController : Controller
 {
     private static List<Student> students = new List<Student>();
@@ -63,6 +133,16 @@ public class StudentController : Controller
     }
 }
 
+---------------This is Model-------------
+public class Student
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string RoleNumber { get; set; }
+    public string Department { get; set; }
+    public string Address { get; set; }
+}
+
 ----------------This is index view------------------
 
 @model List<Student>
@@ -102,6 +182,80 @@ public class StudentController : Controller
 </table>
 
 @Html.ActionLink("Create New", "Create")
+
+---------This is create view----------
+
+@using System.Collections.Generic;
+@using System.LINQ;
+@using System.Web.Mvc;
+@using System.Web.Mvc.html;
+
+
+@model Basic_CRUD.Models.Student
+
+@{
+    ViewBag.Title = "create";
+}
+
+<h2>create</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Student</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RoleNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.RoleNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.RoleNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Department, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Department, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
 
 ----------------This is layout.cshtml-----------------------
 <!DOCTYPE html>
@@ -143,6 +297,17 @@ public class StudentController : Controller
     @RenderSection("scripts", required: false)
 </body>
 </html>
+-------------This is about.cshtml-------------------
+@{
+    ViewBag.Title = "About";
+}
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title.</h2>
+    <h3>@ViewBag.Message</h3>
 
-Now suggest the changes i have to make for adding one more navigation named student and on clicking it it should redirect to index view meaning it should show the list of students
+    <p>Use this area to provide additional information.</p>
+</main>
+
+
+I have provided you with all the codes now tell me the flow of how the application works from where it starts and where it ends 
 
