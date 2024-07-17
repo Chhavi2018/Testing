@@ -234,62 +234,7 @@ namespace Basic_CRUD
 
 
 
----------This is Student controller--------------------
-public class StudentController : Controller
-{
-    private static List<Student> students = new List<Student>();
 
-    // GET: Student
-    public ActionResult Index()
-    {
-        return View(students);
-    }
-
-    // GET: Student/Create
-    public ActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: Student/Create
-    [HttpPost]
-    public ActionResult Create(Student student)
-    {
-        try
-        {
-            student.Id = students.Count > 0 ? students.Max(s => s.Id) + 1 : 1;
-            students.Add(student);
-            return RedirectToAction("Index");
-        }
-        catch
-        {
-            return View();
-        }
-    }
-
-    // GET: Student/Delete/5
-    public ActionResult Delete(int id)
-    {
-        var student = students.FirstOrDefault(s => s.Id == id);
-        return View(student);
-    }
-
-    // POST: Student/Delete/5
-    [HttpPost]
-    public ActionResult Delete(int id, FormCollection collection)
-    {
-        try
-        {
-            var student = students.FirstOrDefault(s => s.Id == id);
-            students.Remove(student);
-            return RedirectToAction("Index");
-        }
-        catch
-        {
-            return View();
-        }
-    }
-}
 
 ---------------This is Model-------------
 public class Student
@@ -301,45 +246,7 @@ public class Student
     public string Address { get; set; }
 }
 
-----------------This is index view------------------
 
-@model List<Student>
-
-@{
-    ViewBag.Title = "Students List";
-}
-
-<h2>Students List</h2>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Role Number</th>
-            <th>Department</th>
-            <th>Address</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var student in Model)
-    {
-        <tr>
-            <td>@student.Id</td>
-            <td>@student.Name</td>
-            <td>@student.RoleNumber</td>
-            <td>@student.Department</td>
-            <td>@student.Address</td>
-            <td>
-                @Html.ActionLink("Delete", "Delete", new { id = student.Id })
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
-
-@Html.ActionLink("Create New", "Create")
 
 ---------This is create view----------
 
@@ -467,5 +374,8 @@ public class Student
 </main>
 
 
-I have provided you with all the codes now tell me the flow of how the application works from where it starts and where it ends 
-
+I have provided you with all the codes now provide code for doing following task
+create login page 
+user name and password with submit button 
+once login is successful create a session and redirect to student page 
+keep one link called logout after clicking the logout link redirect login in page and clear the session 
