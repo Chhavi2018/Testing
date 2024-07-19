@@ -100,6 +100,118 @@ This is index.cshtml-----------------
     </script>
 }
 
+==========This is updated student controller============
+
+using Basic_CRUD.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace Basic_CRUD.Controllers
+{
+    public class StudentController : Controller
+    {
+        public static List<Student> students = new List<Student>();
+        STUDENTEntities db = new STUDENTEntities();
+        STUDENTDETAIL studentdetail = new STUDENTDETAIL();
+        //[Authorize]
+
+        // GET: Student
+        public ActionResult Index()
+        {
+            if (Session["username"] != null)
+            {
+                var students123 = db.STUDENTDETAILS.ToList();
+                return View(students123);
+            }
+            else
+            {
+                return RedirectToAction("login", "Account");
+            }
+        }
+
+        // GET: Student/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Student/Create
+        [HttpPost]
+        public ActionResult Create(Student student)
+        {
+            try
+            {
+                student.Id = db.STUDENTDETAILS.Count() + 1;
+                //students.Add(student);
+                studentdetail.ID=student.Id;
+                studentdetail.NAME = student.Name;
+                studentdetail.ROLENO = Convert.ToInt32(student.RoleNumber);
+                studentdetail.ADDRESS = student.Address;
+                studentdetail.DEPARTMENT = student.Department;
+
+                db.STUDENTDETAILS.Add(studentdetail);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+
+            }
+            catch(Exception ex)
+            {
+                return View();
+            }
+        }
+
+        // GET: Student/Delete/5
+        public ActionResult Delete(int id)
+        {
+            var student = students.FirstOrDefault(s => s.Id == id);
+            return View(student);
+        }
+
+        // POST: Student/Delete/5
+        [HttpPost]
+        public ActionResult Deletestudent(int id)
+        {
+            try
+            {
+                var student = students.FirstOrDefault(s => s.Id == id);
+                if (student != null)
+                {
+                    students.Remove(student);
+                }
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+        // POST: Student/DeleteAjax
+        [HttpPost]
+        public JsonResult DeleteAjax(int id)
+        {
+            try
+            {
+                var student = students.FirstOrDefault(s => s.Id == id);
+                if (student != null)
+                {
+                    students.Remove(student);
+                    return Json(new { success = true });
+                }
+                return Json(new { success = false, message = "Student not found" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+    }
+}
+
 
 @model YourNamespace.Models.Login
 
