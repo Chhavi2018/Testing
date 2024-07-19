@@ -1,3 +1,91 @@
+Compilation Error
+Description: An error occurred during the compilation of a resource required to service this request. Please review the following specific error details and modify your source code appropriately.
+
+Compiler Error Message: CS1503: Argument 1: cannot convert from 'method group' to 'object'
+
+Source Error:
+
+
+Line 26:         @foreach (var student in Model)
+Line 27:         {
+Line 28:             <tr id="st-@student.Id">
+Line 29:                 <td>@student.Id</td>
+Line 30:                 <td>@student.Name</td>
+
+Source File: C:\src\Basic CRUD\Views\Student\Index.cshtml    Line: 28
+
+This is index.cshtml-----------------
+
+
+@using System.Collections.Generic;
+@using System.LINQ;
+
+@model List<Basic_CRUD.Models.STUDENTDETAIL>
+
+@{
+    ViewBag.Title = "Students List";
+    // { Layout = null; }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Students List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Role Number</th>
+            <th>Department</th>
+            <th>Address</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model)
+        {
+            <tr id="st-@student.Id">
+                <td>@student.Id</td>
+                <td>@student.Name</td>
+                <td>@student.RoleNumber</td>
+                <td>@student.Department</td>
+                <td>@student.Address</td>
+                <td>
+                    <button class="btn btn-danger" onclick="deleteStudent(@student.Id)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@Html.ActionLink("Create New", "Create")
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function deleteStudent(id) {
+            if (confirm("Are you sure you want to delete ?")) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteAjax", "Student")',
+                    data: { id: id },
+                    success: function (response) {
+                        if (response.success) {
+                            $("#st-" + id).remove();
+                            alert("Student deleted successfully.");
+                        } else {
+                            alert( "An error occurred while deleting the student");
+                        }
+                    },
+                    error: function () {
+                        alert("An error occurred while processing your request.");
+                    }
+                });
+            }
+        }
+    </script>
+}
+
 
 @model YourNamespace.Models.Login
 
